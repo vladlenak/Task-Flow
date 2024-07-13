@@ -38,8 +38,8 @@ fun TaskFlowApp() {
 
             NavHost(navController, startDestination = "tasks") {
                 composable(route = "tasks") {
-                    TasksScreen(navController, viewModel.tasks) { taskText ->
-                        viewModel.addTask(taskText)
+                    TasksScreen(navController, viewModel.tasks) { taskText, priority ->
+                        viewModel.addTask(taskText, priority)
                     }
                 }
                 composable(

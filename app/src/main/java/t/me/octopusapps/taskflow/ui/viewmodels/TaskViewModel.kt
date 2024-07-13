@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import t.me.octopusapps.taskflow.data.local.db.DatabaseProvider
+import t.me.octopusapps.taskflow.data.local.models.Priority
 import t.me.octopusapps.taskflow.data.local.models.Task
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -24,13 +25,14 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun addTask(taskText: String) {
+    fun addTask(taskText: String, priority: Priority) {
         val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
         val newTask = Task(
             id = _tasks.value.size + 1,
             taskText = taskText,
             timestamp = timestamp,
-            timeSpent = 0L
+            timeSpent = 0L,
+            priority = priority
         )
         viewModelScope.launch {
             taskDao.insert(newTask)

@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.StateFlow
+import t.me.octopusapps.taskflow.data.local.models.Priority
 import t.me.octopusapps.taskflow.data.local.models.Task
 import t.me.octopusapps.taskflow.ui.components.TaskItem
 import t.me.octopusapps.taskflow.ui.dialogs.TaskCreatorDialog
@@ -39,7 +40,7 @@ import t.me.octopusapps.taskflow.ui.dialogs.TaskCreatorDialog
 fun TasksScreen(
     navController: NavHostController,
     localeTasks: StateFlow<List<Task>>,
-    onAddTask: (String) -> Unit
+    onAddTask: (String, Priority) -> Unit
 ) {
     val tasks by localeTasks.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
@@ -92,8 +93,8 @@ fun TasksScreen(
                 if (showDialog) {
                     TaskCreatorDialog(
                         onDismiss = { showDialog = false },
-                        onAddTask = { taskText ->
-                            onAddTask(taskText)
+                        onAddTask = { taskText, priority ->
+                            onAddTask(taskText, priority)
                             showDialog = false
                         }
                     )

@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.room.Update
 import t.me.octopusapps.taskflow.data.local.models.Task
 
@@ -29,6 +30,7 @@ interface TaskDao {
 }
 
 @Database(entities = [Task::class], version = 1)
+@TypeConverters(PriorityConverter::class)
 abstract class TaskDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
 }

@@ -1,6 +1,7 @@
 package t.me.octopusapps.taskflow.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,11 @@ fun TaskItem(task: Task, onClick: (Int) -> Unit) {
             .background(
                 color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(8.dp)
+            )
+            .border(
+                width = 2.dp,
+                color = getColorByPriority(task.priority),
+                shape = RoundedCornerShape(20.dp)
             )
             .padding(16.dp)
     ) {

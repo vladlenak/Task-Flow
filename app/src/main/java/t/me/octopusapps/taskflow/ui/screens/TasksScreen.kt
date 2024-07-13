@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.StateFlow
+import t.me.octopusapps.taskflow.data.local.models.FullPriority
 import t.me.octopusapps.taskflow.data.local.models.Priority
 import t.me.octopusapps.taskflow.data.local.models.Task
 import t.me.octopusapps.taskflow.ui.components.PriorityHeader
@@ -110,10 +111,10 @@ fun TaskList(
     modifier: Modifier = Modifier
 ) {
     val sortedTasksWithHeaders = mutableListOf<Any>()
-    Priority.entries.forEach { priority ->
+    Priority.entries.forEachIndexed { index, priority ->
         val tasksForPriority = tasks.filter { it.priority == priority }
         if (tasksForPriority.isNotEmpty()) {
-            sortedTasksWithHeaders.add(priority)
+            sortedTasksWithHeaders.add(FullPriority.entries[index])
             sortedTasksWithHeaders.addAll(tasksForPriority)
         }
     }
@@ -125,7 +126,7 @@ fun TaskList(
     ) {
         items(sortedTasksWithHeaders) { item ->
             when (item) {
-                is Priority -> PriorityHeader(priority = item)
+                is FullPriority -> PriorityHeader(priority = item)
                 is Task -> TaskItem(task = item, onClick = {
                     navController.navigate("stopwatch/${item.id}")
                 })

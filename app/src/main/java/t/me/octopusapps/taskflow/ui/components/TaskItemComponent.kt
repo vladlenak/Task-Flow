@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import t.me.octopusapps.taskflow.data.local.models.Task
+import t.me.octopusapps.taskflow.utilities.TimeFormatHelper
 
 @Composable
 fun TaskItem(task: Task, onClick: (Int) -> Unit) {
@@ -43,7 +44,7 @@ fun TaskItem(task: Task, onClick: (Int) -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Time spent: ${task.timeSpent / 1000} seconds",
+                text = "Time spent: ${TimeFormatHelper.getTimeStr(task.timeSpent)}",
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.weight(1f)
             )

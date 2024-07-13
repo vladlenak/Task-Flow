@@ -36,6 +36,7 @@ import kotlinx.coroutines.delay
 import t.me.octopusapps.taskflow.data.local.models.Task
 import t.me.octopusapps.taskflow.ui.components.getColorByPriority
 import t.me.octopusapps.taskflow.ui.dialogs.DeleteTaskDialog
+import t.me.octopusapps.taskflow.utilities.TimeFormatHelper
 
 @Composable
 fun StopwatchScreen(
@@ -88,7 +89,7 @@ fun StopwatchScreen(
                 .background(Color.White, CircleShape)
         ) {
             Text(
-                text = "Time: ${timeElapsed / 1000}s",
+                text = "Time: ${TimeFormatHelper.getTimeStr(timeElapsed)}",
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Black,
                 fontSize = 20.sp

@@ -13,7 +13,7 @@ import t.me.octopusapps.taskflow.data.local.models.FullPriority
 fun PriorityHeader(priority: FullPriority) {
     Text(
         text = priority.displayName,
-        style = MaterialTheme.typography.titleLarge,
+        style = MaterialTheme.typography.titleMedium,
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)

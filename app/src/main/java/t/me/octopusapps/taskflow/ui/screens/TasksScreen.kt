@@ -63,8 +63,7 @@ fun TasksScreen(
             ) {
                 Text(
                     text = "Task Flow",
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(top = 40.dp)
+                    style = MaterialTheme.typography.titleLarge
                 )
                 if (tasks.isEmpty()) {
                     EmptyTaskMessage()

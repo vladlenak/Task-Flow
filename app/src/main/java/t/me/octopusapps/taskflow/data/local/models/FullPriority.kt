@@ -1,8 +1,8 @@
 package t.me.octopusapps.taskflow.data.local.models
 
 enum class FullPriority(val displayName: String) {
-    A("A - Important & Urgent"),
-    B("B - Important & Not urgent"),
-    C("C - Not important & Urgent"),
-    D("D - Not important & Not urgent")
+    A("A - Important & Urgent (do)"),
+    B("B - Important & Not urgent (schedule)"),
+    C("C - Not important & Urgent (delegate)"),
+    D("D - Not important & Not urgent (delete)")
 }

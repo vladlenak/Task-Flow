@@ -75,23 +75,29 @@ fun StopwatchScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            text = "Task: ${task.taskTitle}",
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 200.dp)
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, top = 70.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Task: ${task.taskTitle}",
+                style = MaterialTheme.typography.titleLarge
+            )
+        }
 
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(300.dp)
                 .border(2.dp, getColorByPriority(priority = task.priority), CircleShape)
-                .background(Color.White, CircleShape)
+                .background(Color.Transparent, CircleShape)
         ) {
             Text(
                 text = "Time: ${TimeFormatHelper.getTimeStr(timeElapsed)}",
                 style = MaterialTheme.typography.bodyLarge,
-                color = Color.Black,
+                color = Color.White,
                 fontSize = 20.sp
             )
         }

@@ -36,7 +36,7 @@ fun TaskItem(task: Task, onClick: (Int) -> Unit) {
             .padding(16.dp)
     ) {
         Text(
-            text = task.taskText,
+            text = task.taskTitle,
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(bottom = 8.dp)
         )

@@ -29,7 +29,7 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
         val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
         val newTask = Task(
             id = _tasks.value.size + 1,
-            taskText = taskText,
+            taskTitle = taskText,
             timestamp = timestamp,
             timeSpent = 0L,
             priority = priority

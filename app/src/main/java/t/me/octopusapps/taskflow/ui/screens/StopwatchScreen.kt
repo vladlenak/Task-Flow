@@ -76,7 +76,7 @@ fun StopwatchScreen(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "Task: ${task.taskText}",
+            text = "Task: ${task.taskTitle}",
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 200.dp)
         )

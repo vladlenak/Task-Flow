@@ -17,7 +17,7 @@ Task Flow is designed to help you stay on track and make the most of your day. W
 - Database: Room.
 - Multithreading: Coroutines, Flow.
 
-## Link
+## Link (awaiting publication)
 <p style="text-align: left;">
 <a href="https://play.google.com/store/apps/details?id=t.me.octopusapps.taskflow">
     <img alt="Get it on Google Play"

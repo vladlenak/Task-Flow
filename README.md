@@ -1,4 +1,4 @@
-# Task Flow: To-Do App for ADHD
+# Task Flow: To-Do app for people with ADHD
 Task Flow is a specialized to-do app designed to help individuals with ADHD effectively manage their tasks and time.
 The app is simple and intuitive, ensuring a seamless experience to keep you focused and productive.
 

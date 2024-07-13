@@ -33,6 +33,7 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.StateFlow
 import t.me.octopusapps.taskflow.data.local.models.Priority
 import t.me.octopusapps.taskflow.data.local.models.Task
+import t.me.octopusapps.taskflow.ui.components.PriorityHeader
 import t.me.octopusapps.taskflow.ui.components.TaskItem
 import t.me.octopusapps.taskflow.ui.dialogs.TaskCreatorDialog
 
@@ -64,7 +65,6 @@ fun TasksScreen(
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(top = 40.dp)
                 )
-
                 if (tasks.isEmpty()) {
                     EmptyTaskMessage()
                 } else {
@@ -89,7 +89,6 @@ fun TasksScreen(
                         )
                     }
                 }
-
                 if (showDialog) {
                     TaskCreatorDialog(
                         onDismiss = { showDialog = false },
@@ -110,15 +109,27 @@ fun TaskList(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    val sortedTasksWithHeaders = mutableListOf<Any>()
+    Priority.entries.forEach { priority ->
+        val tasksForPriority = tasks.filter { it.priority == priority }
+        if (tasksForPriority.isNotEmpty()) {
+            sortedTasksWithHeaders.add(priority)
+            sortedTasksWithHeaders.addAll(tasksForPriority)
+        }
+    }
+
     LazyColumn(
         modifier = modifier,
         contentPadding = PaddingValues(vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(tasks) { task ->
-            TaskItem(task = task, onClick = {
-                navController.navigate("stopwatch/${task.id}")
-            })
+        items(sortedTasksWithHeaders) { item ->
+            when (item) {
+                is Priority -> PriorityHeader(priority = item)
+                is Task -> TaskItem(task = item, onClick = {
+                    navController.navigate("stopwatch/${item.id}")
+                })
+            }
         }
     }
 }

@@ -36,14 +36,14 @@ import kotlinx.coroutines.delay
 import t.me.octopusapps.taskflow.data.local.models.Task
 import t.me.octopusapps.taskflow.ui.components.getColorByPriority
 import t.me.octopusapps.taskflow.ui.dialogs.DeleteTaskDialog
+import t.me.octopusapps.taskflow.ui.viewmodels.StopwatchViewModel
 import t.me.octopusapps.taskflow.utilities.TimeFormatHelper
 
 @Composable
 fun StopwatchScreen(
     navController: NavHostController,
     task: Task,
-    onUpdateTask: (Task) -> Unit,
-    onDeleteTask: (Task) -> Unit
+    viewModel: StopwatchViewModel
 ) {
 
     var timeElapsed by remember { mutableLongStateOf(task.timeSpent) }
@@ -66,7 +66,7 @@ fun StopwatchScreen(
     BackHandler {
         isRunning = false
         task.timeSpent = timeElapsed
-        onUpdateTask(task)
+        viewModel.updateTask(task)
         navController.popBackStack()
     }
 
@@ -125,7 +125,7 @@ fun StopwatchScreen(
                 Button(onClick = {
                     isRunning = false
                     task.timeSpent = timeElapsed
-                    onUpdateTask(task)
+                    viewModel.updateTask(task)
                     navController.popBackStack()
                 }) {
                     Text("Stop")
@@ -146,7 +146,7 @@ fun StopwatchScreen(
 
     if (showDialog) {
         DeleteTaskDialog(onDismiss = { showDialog = false }) {
-            onDeleteTask(task)
+            viewModel.deleteTask(task)
             navController.popBackStack()
         }
     }

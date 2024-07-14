@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,22 +31,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.flow.StateFlow
 import t.me.octopusapps.taskflow.data.local.models.FullPriority
 import t.me.octopusapps.taskflow.data.local.models.Priority
 import t.me.octopusapps.taskflow.data.local.models.Task
 import t.me.octopusapps.taskflow.ui.components.PriorityHeader
 import t.me.octopusapps.taskflow.ui.components.TaskItem
 import t.me.octopusapps.taskflow.ui.dialogs.TaskCreatorDialog
+import t.me.octopusapps.taskflow.ui.viewmodels.TaskViewModel
 
 @Composable
 fun TasksScreen(
     navController: NavHostController,
-    localeTasks: StateFlow<List<Task>>,
-    onAddTask: (String, Priority) -> Unit
+    viewModel: TaskViewModel
 ) {
-    val tasks by localeTasks.collectAsState()
+    val tasks by viewModel.tasks.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.refreshTasks()
+    }
 
     Scaffold(
         floatingActionButton = {
@@ -93,7 +97,7 @@ fun TasksScreen(
                     TaskCreatorDialog(
                         onDismiss = { showDialog = false },
                         onAddTask = { taskText, priority ->
-                            onAddTask(taskText, priority)
+                            viewModel.addTask(taskText, priority)
                             showDialog = false
                         }
                     )

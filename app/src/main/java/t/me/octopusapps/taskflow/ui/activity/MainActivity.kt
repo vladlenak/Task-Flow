@@ -13,11 +13,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import dagger.hilt.android.AndroidEntryPoint
 import t.me.octopusapps.taskflow.ui.screens.StopwatchScreen
 import t.me.octopusapps.taskflow.ui.screens.TasksScreen
 import t.me.octopusapps.taskflow.ui.theme.TaskFlowTheme
+import t.me.octopusapps.taskflow.ui.viewmodels.StopwatchViewModel
 import t.me.octopusapps.taskflow.ui.viewmodels.TaskViewModel
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,29 +37,22 @@ fun TaskFlowApp() {
     TaskFlowTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
             val navController = rememberNavController()
-            val viewModel: TaskViewModel = viewModel()
+            val taskViewModel: TaskViewModel = viewModel()
+            val stopwatchViewModel: StopwatchViewModel = viewModel()
 
             NavHost(navController, startDestination = "tasks") {
-                composable(route = "tasks") {
-                    TasksScreen(navController, viewModel.tasks) { taskText, priority ->
-                        viewModel.addTask(taskText, priority)
-                    }
-                }
+                composable(route = "tasks") { TasksScreen(navController, taskViewModel) }
                 composable(
                     route = "stopwatch/{taskId}",
                     arguments = listOf(navArgument("taskId") { type = NavType.IntType })
                 ) { backStackEntry ->
                     val taskId = backStackEntry.arguments?.getInt("taskId") ?: 0
-                    viewModel.getTaskById(taskId)?.let { localTask ->
+
+                    stopwatchViewModel.getTaskById(taskId)?.let { localTask ->
                         StopwatchScreen(
-                            navController,
-                            localTask,
-                            onUpdateTask = {
-                                viewModel.updateTask(it)
-                            },
-                            onDeleteTask = {
-                                viewModel.deleteTask(it)
-                            }
+                            navController = navController,
+                            task = localTask,
+                            viewModel = stopwatchViewModel
                         )
                     }
 

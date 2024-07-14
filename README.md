@@ -13,9 +13,10 @@ Task Flow is designed to help you stay on track and make the most of your day. W
 ## Stack
 - Language: Kotlin.
 - UI: Compose, Navigation.
-- Architecture: Clean Architecture, MVVM.
+- Architecture: Clean Architecture, MVVM, Single Activity.
 - Database: Room.
 - Multithreading: Coroutines, Flow.
+- Dependency injection: Hilt.
 
 ## Link (awaiting publication)
 <p style="text-align: left;">

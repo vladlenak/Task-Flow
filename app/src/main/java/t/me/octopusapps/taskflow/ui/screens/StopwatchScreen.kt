@@ -36,16 +36,15 @@ import kotlinx.coroutines.delay
 import t.me.octopusapps.taskflow.data.local.models.Task
 import t.me.octopusapps.taskflow.ui.components.getColorByPriority
 import t.me.octopusapps.taskflow.ui.dialogs.DeleteTaskDialog
-import t.me.octopusapps.taskflow.ui.viewmodels.StopwatchViewModel
 import t.me.octopusapps.taskflow.utilities.TimeFormatHelper
 
 @Composable
 fun StopwatchScreen(
     navController: NavHostController,
     task: Task,
-    viewModel: StopwatchViewModel
+    onUpdateTask: (Task) -> Unit,
+    onDeleteTask: (Task) -> Unit
 ) {
-
     var timeElapsed by remember { mutableLongStateOf(task.timeSpent) }
     var isRunning by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
@@ -66,7 +65,7 @@ fun StopwatchScreen(
     BackHandler {
         isRunning = false
         task.timeSpent = timeElapsed
-        viewModel.updateTask(task)
+        onUpdateTask(task)
         navController.popBackStack()
     }
 
@@ -91,13 +90,17 @@ fun StopwatchScreen(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(300.dp)
-                .border(2.dp, getColorByPriority(priority = task.priority), CircleShape)
+                .border(
+                    2.dp,
+                    getColorByPriority(priority = task.priority),
+                    CircleShape
+                )
                 .background(Color.Transparent, CircleShape)
         ) {
             Text(
                 text = "Time: ${TimeFormatHelper.getTimeStr(timeElapsed)}",
                 style = MaterialTheme.typography.bodyLarge,
-                color = Color.White,
+                color = Color.Black,
                 fontSize = 20.sp
             )
         }
@@ -125,7 +128,7 @@ fun StopwatchScreen(
                 Button(onClick = {
                     isRunning = false
                     task.timeSpent = timeElapsed
-                    viewModel.updateTask(task)
+                    onUpdateTask(task)
                     navController.popBackStack()
                 }) {
                     Text("Stop")
@@ -146,7 +149,7 @@ fun StopwatchScreen(
 
     if (showDialog) {
         DeleteTaskDialog(onDismiss = { showDialog = false }) {
-            viewModel.deleteTask(task)
+            onDeleteTask(task)
             navController.popBackStack()
         }
     }

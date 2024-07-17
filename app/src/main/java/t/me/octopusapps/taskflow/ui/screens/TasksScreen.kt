@@ -37,6 +37,7 @@ import t.me.octopusapps.taskflow.data.local.models.Task
 import t.me.octopusapps.taskflow.ui.components.PriorityHeader
 import t.me.octopusapps.taskflow.ui.components.TaskItem
 import t.me.octopusapps.taskflow.ui.dialogs.TaskCreatorDialog
+import t.me.octopusapps.taskflow.ui.navigation.NavDestinations
 import t.me.octopusapps.taskflow.ui.viewmodels.TaskViewModel
 
 @Composable
@@ -131,7 +132,7 @@ fun TaskList(
             when (item) {
                 is FullPriority -> PriorityHeader(priority = item)
                 is Task -> TaskItem(task = item, onClick = {
-                    navController.navigate("stopwatch/${item.id}")
+                    navController.navigate("${NavDestinations.STOPWATCH}/${item.id}")
                 })
             }
         }

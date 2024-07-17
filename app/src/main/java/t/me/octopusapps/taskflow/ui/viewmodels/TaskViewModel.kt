@@ -3,6 +3,7 @@ package t.me.octopusapps.taskflow.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -45,6 +46,18 @@ class TaskViewModel @Inject constructor(
 
     fun refreshTasks() = viewModelScope.launch {
         _tasks.value = taskDatabase.taskDao().getAllTasks()
+    }
+
+    fun getTaskById(id: Int): Task? {
+        return tasks.value.find { it.id == id }
+    }
+
+    fun updateTask(task: Task) = viewModelScope.launch {
+        taskDatabase.taskDao().update(task)
+    }
+
+    fun deleteTask(task: Task) = viewModelScope.launch(Dispatchers.IO) {
+        taskDatabase.taskDao().delete(task)
     }
 
 }

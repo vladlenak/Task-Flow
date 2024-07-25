@@ -10,7 +10,10 @@ import kotlinx.coroutines.launch
 import t.me.octopusapps.taskflow.data.local.db.TaskDatabase
 import t.me.octopusapps.taskflow.data.local.models.Priority
 import t.me.octopusapps.taskflow.data.local.models.Task
+import t.me.octopusapps.taskflow.ui.ext.formatTime
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalTime
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
@@ -29,14 +32,16 @@ class TaskViewModel @Inject constructor(
         }
     }
 
-    fun addTask(taskText: String, priority: Priority) {
-        val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+    fun addTask(taskText: String, priority: Priority, selectedDate: LocalDate, selectedTime: LocalTime) {
+        val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
         val newTask = Task(
             id = _tasks.value.size + 1,
             taskTitle = taskText,
             timestamp = timestamp,
             timeSpent = 0L,
-            priority = priority
+            priority = priority,
+            date = selectedDate.toString(),
+            time = selectedTime.toString().formatTime()
         )
         viewModelScope.launch {
             taskDatabase.taskDao().insert(newTask)

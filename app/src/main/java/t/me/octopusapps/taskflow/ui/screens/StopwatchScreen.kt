@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import t.me.octopusapps.taskflow.data.local.models.Task
+import t.me.octopusapps.taskflow.ui.components.DisplayDateTime
 import t.me.octopusapps.taskflow.ui.components.getColorByPriority
 import t.me.octopusapps.taskflow.ui.dialogs.DeleteTaskDialog
 import t.me.octopusapps.taskflow.utilities.TimeFormatHelper
@@ -97,12 +98,19 @@ fun StopwatchScreen(
                 )
                 .background(Color.Transparent, CircleShape)
         ) {
-            Text(
-                text = "Time: ${TimeFormatHelper.getTimeStr(timeElapsed)}",
-                style = MaterialTheme.typography.bodyLarge,
-                color = Color.Black,
-                fontSize = 20.sp
-            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Time: ${TimeFormatHelper.getTimeStr(timeElapsed)}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color.Black,
+                    fontSize = 20.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                DisplayDateTime(task = task)
+            }
         }
 
         Column(
@@ -144,7 +152,6 @@ fun StopwatchScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
         }
-
     }
 
     if (showDialog) {
@@ -153,5 +160,4 @@ fun StopwatchScreen(
             navController.popBackStack()
         }
     }
-
 }

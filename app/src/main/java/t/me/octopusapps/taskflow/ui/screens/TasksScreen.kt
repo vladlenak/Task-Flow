@@ -97,8 +97,8 @@ fun TasksScreen(
                 if (showDialog) {
                     TaskCreatorDialog(
                         onDismiss = { showDialog = false },
-                        onAddTask = { taskText, priority ->
-                            viewModel.addTask(taskText, priority)
+                        onAddTask = { taskText, priority, selectedDate, selectedTime ->
+                            viewModel.addTask(taskText, priority, selectedDate, selectedTime)
                             showDialog = false
                         }
                     )

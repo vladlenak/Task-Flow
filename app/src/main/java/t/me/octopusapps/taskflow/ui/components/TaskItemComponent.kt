@@ -49,5 +49,6 @@ fun TaskItem(task: Task, onClick: (Int) -> Unit) {
                 modifier = Modifier.weight(1f)
             )
         }
+        DisplayDateTime(task = task)
     }
 }

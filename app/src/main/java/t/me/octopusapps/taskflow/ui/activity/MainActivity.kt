@@ -24,7 +24,10 @@ class MainActivity : ComponentActivity() {
             TaskFlowTheme {
                 Surface(color = MaterialTheme.colorScheme.background) {
                     val navController = rememberNavController()
-                    AppNavigation(navController = navController, taskViewModel = taskViewModel)
+                    AppNavigation(
+                        navController = navController,
+                        taskViewModel = taskViewModel
+                    )
                 }
             }
         }

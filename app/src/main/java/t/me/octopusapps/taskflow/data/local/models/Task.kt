@@ -10,5 +10,7 @@ data class Task(
     @ColumnInfo(name = "task_title") val taskTitle: String,
     @ColumnInfo(name = "timestamp") val timestamp: String,
     @ColumnInfo(name = "time_spent") var timeSpent: Long = 0L,
-    @ColumnInfo(name = "priority") val priority: Priority
+    @ColumnInfo(name = "priority") val priority: Priority,
+    @ColumnInfo(name = "date") val date: String,
+    @ColumnInfo(name = "time") val time: String
 )

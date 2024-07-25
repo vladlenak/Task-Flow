@@ -11,7 +11,10 @@ import t.me.octopusapps.taskflow.ui.screens.TasksScreen
 import t.me.octopusapps.taskflow.ui.viewmodels.TaskViewModel
 
 @Composable
-fun AppNavigation(navController: NavHostController, taskViewModel: TaskViewModel) {
+fun AppNavigation(
+    navController: NavHostController,
+    taskViewModel: TaskViewModel
+) {
     NavHost(
         navController = navController,
         startDestination = NavDestinations.TASKS

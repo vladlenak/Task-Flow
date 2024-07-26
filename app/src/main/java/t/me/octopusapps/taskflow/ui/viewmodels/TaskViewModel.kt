@@ -8,9 +8,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import t.me.octopusapps.taskflow.data.local.db.TaskDatabase
-import t.me.octopusapps.taskflow.data.local.models.Priority
+import t.me.octopusapps.taskflow.domain.models.Priority
 import t.me.octopusapps.taskflow.data.local.models.Task
-import t.me.octopusapps.taskflow.ui.ext.formatTime
+import t.me.octopusapps.taskflow.domain.constants.Constants
+import t.me.octopusapps.taskflow.domain.ext.formatTime
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
@@ -33,7 +34,7 @@ class TaskViewModel @Inject constructor(
     }
 
     fun addTask(taskText: String, priority: Priority, selectedDate: LocalDate, selectedTime: LocalTime) {
-        val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
+        val timestamp = SimpleDateFormat(Constants.TIMESTAMP_PATTERN, Locale.getDefault()).format(Date())
         val newTask = Task(
             id = _tasks.value.size + 1,
             taskTitle = taskText,
@@ -41,7 +42,8 @@ class TaskViewModel @Inject constructor(
             timeSpent = 0L,
             priority = priority,
             date = selectedDate.toString(),
-            time = selectedTime.toString().formatTime()
+            time = selectedTime.toString().formatTime(),
+            isCompleted = false
         )
         viewModelScope.launch {
             taskDatabase.taskDao().insert(newTask)
@@ -63,6 +65,11 @@ class TaskViewModel @Inject constructor(
 
     fun deleteTask(task: Task) = viewModelScope.launch(Dispatchers.IO) {
         taskDatabase.taskDao().delete(task)
+    }
+
+    fun onCheckedChange(task: Task, isChecked: Boolean) = viewModelScope.launch(Dispatchers.IO) {
+        taskDatabase.taskDao().update(task.copy(isCompleted = isChecked))
+        refreshTasks()
     }
 
 }

@@ -43,11 +43,12 @@ import t.me.octopusapps.taskflow.utilities.TimeFormatHelper
 fun StopwatchScreen(
     navController: NavHostController,
     task: Task,
+    isClickPlay: Boolean,
     onUpdateTask: (Task) -> Unit,
     onDeleteTask: (Task) -> Unit
 ) {
     var timeElapsed by remember { mutableLongStateOf(task.timeSpent) }
-    var isRunning by remember { mutableStateOf(false) }
+    var isRunning by remember { mutableStateOf(isClickPlay) }
     var showDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(task) {

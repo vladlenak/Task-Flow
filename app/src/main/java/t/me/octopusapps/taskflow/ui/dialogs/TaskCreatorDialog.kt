@@ -25,9 +25,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import t.me.octopusapps.taskflow.data.local.models.Priority
+import t.me.octopusapps.taskflow.domain.models.Priority
 import t.me.octopusapps.taskflow.ui.components.getColorByPriority
-import t.me.octopusapps.taskflow.ui.ext.formatTime
+import t.me.octopusapps.taskflow.domain.ext.formatTime
 import java.time.LocalDate
 import java.time.LocalTime
 

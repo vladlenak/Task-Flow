@@ -3,6 +3,7 @@ package t.me.octopusapps.taskflow.data.local.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import t.me.octopusapps.taskflow.domain.models.Priority
 
 @Entity(tableName = "tasks")
 data class Task(
@@ -12,5 +13,6 @@ data class Task(
     @ColumnInfo(name = "time_spent") var timeSpent: Long = 0L,
     @ColumnInfo(name = "priority") val priority: Priority,
     @ColumnInfo(name = "date") val date: String,
-    @ColumnInfo(name = "time") val time: String
+    @ColumnInfo(name = "time") val time: String,
+    @ColumnInfo(name = "is_completed") val isCompleted: Boolean
 )

@@ -4,13 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
@@ -31,13 +28,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import t.me.octopusapps.taskflow.data.local.models.FullPriority
-import t.me.octopusapps.taskflow.data.local.models.Priority
-import t.me.octopusapps.taskflow.data.local.models.Task
-import t.me.octopusapps.taskflow.ui.components.PriorityHeader
-import t.me.octopusapps.taskflow.ui.components.TaskItem
+import t.me.octopusapps.taskflow.ui.components.TaskListComponent
 import t.me.octopusapps.taskflow.ui.dialogs.TaskCreatorDialog
-import t.me.octopusapps.taskflow.ui.navigation.NavDestinations
 import t.me.octopusapps.taskflow.ui.viewmodels.TaskViewModel
 
 @Composable
@@ -79,18 +71,20 @@ fun TasksScreen(
                         ) {
                             Spacer(modifier = Modifier.padding(top = 16.dp))
                             OneTaskMessage()
-                            TaskList(
+                            TaskListComponent(
                                 tasks = tasks,
                                 navController = navController,
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
+                                taskViewModel = viewModel
                             )
                         }
 
                     } else {
-                        TaskList(
+                        TaskListComponent(
                             tasks = tasks,
                             navController = navController,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
+                            taskViewModel = viewModel
                         )
                     }
                 }
@@ -106,37 +100,6 @@ fun TasksScreen(
             }
         }
     )
-}
-
-@Composable
-fun TaskList(
-    tasks: List<Task>,
-    navController: NavHostController,
-    modifier: Modifier = Modifier
-) {
-    val sortedTasksWithHeaders = mutableListOf<Any>()
-    Priority.entries.forEachIndexed { index, priority ->
-        val tasksForPriority = tasks.filter { it.priority == priority }
-        if (tasksForPriority.isNotEmpty()) {
-            sortedTasksWithHeaders.add(FullPriority.entries[index])
-            sortedTasksWithHeaders.addAll(tasksForPriority)
-        }
-    }
-
-    LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(sortedTasksWithHeaders) { item ->
-            when (item) {
-                is FullPriority -> PriorityHeader(priority = item)
-                is Task -> TaskItem(task = item, onClick = {
-                    navController.navigate("${NavDestinations.STOPWATCH}/${item.id}")
-                })
-            }
-        }
-    }
 }
 
 @Composable

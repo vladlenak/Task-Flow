@@ -9,6 +9,6 @@ import t.me.octopusapps.taskflow.data.local.models.Task
 fun DisplayDateTime(task: Task) {
     Text(
         text = "${task.date} ${task.time}",
-        style = MaterialTheme.typography.bodyMedium
+        style = MaterialTheme.typography.bodySmall
     )
 }

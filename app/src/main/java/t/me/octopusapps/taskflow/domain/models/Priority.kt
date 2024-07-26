@@ -1,4 +1,4 @@
-package t.me.octopusapps.taskflow.data.local.models
+package t.me.octopusapps.taskflow.domain.models
 
 enum class Priority(val displayName: String) {
     A("A"),

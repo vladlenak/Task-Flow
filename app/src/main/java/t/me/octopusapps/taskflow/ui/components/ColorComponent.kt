@@ -2,7 +2,7 @@ package t.me.octopusapps.taskflow.ui.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import t.me.octopusapps.taskflow.data.local.models.Priority
+import t.me.octopusapps.taskflow.domain.models.Priority
 
 @Composable
 fun getColorByPriority(priority: Priority): Color {

@@ -1,7 +1,7 @@
 package t.me.octopusapps.taskflow.data.local.db
 
 import androidx.room.TypeConverter
-import t.me.octopusapps.taskflow.data.local.models.Priority
+import t.me.octopusapps.taskflow.domain.models.Priority
 
 class PriorityConverter {
 
@@ -14,4 +14,5 @@ class PriorityConverter {
     fun toPriority(priorityString: String): Priority {
         return Priority.valueOf(priorityString)
     }
+
 }

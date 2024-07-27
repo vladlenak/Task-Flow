@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import t.me.octopusapps.taskflow.ui.components.TaskListComponent
 import t.me.octopusapps.taskflow.ui.dialogs.TaskCreatorDialog
@@ -35,7 +36,7 @@ import t.me.octopusapps.taskflow.ui.viewmodels.TaskViewModel
 @Composable
 fun TasksScreen(
     navController: NavHostController,
-    viewModel: TaskViewModel
+    viewModel: TaskViewModel = hiltViewModel()
 ) {
     val tasks by viewModel.tasks.collectAsState()
     var showDialog by remember { mutableStateOf(false) }

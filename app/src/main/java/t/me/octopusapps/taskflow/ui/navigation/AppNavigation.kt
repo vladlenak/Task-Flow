@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import t.me.octopusapps.taskflow.domain.constants.NavDestinations
 import t.me.octopusapps.taskflow.ui.screens.StopwatchScreen
+import t.me.octopusapps.taskflow.ui.screens.TaskEditorScreen
 import t.me.octopusapps.taskflow.ui.screens.TasksScreen
 import t.me.octopusapps.taskflow.ui.viewmodels.TaskViewModel
 
@@ -22,8 +23,7 @@ fun AppNavigation(
     ) {
         composable(route = NavDestinations.TASKS) {
             TasksScreen(
-                navController = navController,
-                viewModel = taskViewModel
+                navController = navController
             )
         }
         composable(
@@ -44,6 +44,18 @@ fun AppNavigation(
                     onDeleteTask = { taskViewModel.deleteTask(it) }
                 )
             }
+        }
+        composable(
+            route = "${NavDestinations.EDIT_TASK}/{${NavDestinations.TASK_ID_ARG}}",
+            arguments = listOf(
+                navArgument(NavDestinations.TASK_ID_ARG) { type = NavType.IntType }
+            )
+        ) { backStackEntry ->
+            val taskId = backStackEntry.arguments?.getInt(NavDestinations.TASK_ID_ARG) ?: 0
+            TaskEditorScreen(
+                navController = navController,
+                taskId = taskId
+            )
         }
     }
 }

@@ -15,8 +15,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.BasicText
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import t.me.octopusapps.taskflow.data.local.models.Task
+import t.me.octopusapps.taskflow.domain.constants.NavDestinations
 import t.me.octopusapps.taskflow.ui.components.DisplayDateTime
 import t.me.octopusapps.taskflow.ui.components.getColorByPriority
 import t.me.octopusapps.taskflow.ui.dialogs.DeleteTaskDialog
@@ -50,6 +55,7 @@ fun StopwatchScreen(
     var timeElapsed by remember { mutableLongStateOf(task.timeSpent) }
     var isRunning by remember { mutableStateOf(isClickPlay) }
     var showDialog by remember { mutableStateOf(false) }
+    var isChecked by remember { mutableStateOf(task.isCompleted) }
 
     LaunchedEffect(task) {
         task.let {
@@ -67,7 +73,7 @@ fun StopwatchScreen(
     BackHandler {
         isRunning = false
         task.timeSpent = timeElapsed
-        onUpdateTask(task)
+        onUpdateTask(task.copy(isCompleted = isChecked))
         navController.popBackStack()
     }
 
@@ -76,16 +82,40 @@ fun StopwatchScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp, top = 70.dp),
-            contentAlignment = Alignment.Center
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
+            Checkbox(
+                checked = isChecked,
+                onCheckedChange = { checked ->
+                    isChecked = checked
+                },
+                modifier = Modifier.padding(end = 8.dp).size(48.dp)
+            )
             Text(
                 text = "Task: ${task.taskTitle}",
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.weight(1f)
             )
+            IconButton(
+                onClick = {
+                    navController.navigate("${NavDestinations.EDIT_TASK}/${task.id}") {
+                        popUpTo("${NavDestinations.STOPWATCH}/{${NavDestinations.TASK_ID_ARG}}/{${NavDestinations.IS_CLICK_PLAY_ARG}}") { inclusive = true }
+                        launchSingleTop = true
+                    }
+                },
+                modifier = Modifier.size(48.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Task Action",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
         }
 
         Box(
@@ -106,7 +136,6 @@ fun StopwatchScreen(
                 Text(
                     text = "Time: ${TimeFormatHelper.getTimeStr(timeElapsed)}",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = Color.Black,
                     fontSize = 20.sp
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -137,7 +166,7 @@ fun StopwatchScreen(
                 Button(onClick = {
                     isRunning = false
                     task.timeSpent = timeElapsed
-                    onUpdateTask(task)
+                    onUpdateTask(task.copy(isCompleted = isChecked))
                     navController.popBackStack()
                 }) {
                     Text("Stop")
@@ -146,7 +175,7 @@ fun StopwatchScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            BasicText(
+            Text(
                 text = "Added on: ${task.timestamp}",
                 style = MaterialTheme.typography.bodySmall
             )

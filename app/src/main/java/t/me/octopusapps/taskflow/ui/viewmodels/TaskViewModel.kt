@@ -59,7 +59,7 @@ class TaskViewModel @Inject constructor(
         return tasks.value.find { it.id == id }
     }
 
-    fun updateTask(task: Task) = viewModelScope.launch {
+    fun updateTask(task: Task) = viewModelScope.launch(Dispatchers.IO) {
         taskDatabase.taskDao().update(task)
     }
 

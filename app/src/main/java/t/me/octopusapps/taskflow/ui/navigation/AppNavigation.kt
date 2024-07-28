@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import t.me.octopusapps.taskflow.domain.constants.NavDestinations
+import t.me.octopusapps.taskflow.ui.screens.SettingsScreen
 import t.me.octopusapps.taskflow.ui.screens.StopwatchScreen
 import t.me.octopusapps.taskflow.ui.screens.TaskEditorScreen
 import t.me.octopusapps.taskflow.ui.screens.TasksScreen
@@ -55,6 +56,13 @@ fun AppNavigation(
             TaskEditorScreen(
                 navController = navController,
                 taskId = taskId
+            )
+        }
+        composable(
+            route = NavDestinations.SETTINGS
+        ) {
+            SettingsScreen(
+                navController = navController
             )
         }
     }

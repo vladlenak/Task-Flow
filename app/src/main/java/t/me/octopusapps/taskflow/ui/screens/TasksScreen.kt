@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,10 +32,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import t.me.octopusapps.taskflow.domain.constants.NavDestinations
 import t.me.octopusapps.taskflow.ui.components.TaskListComponent
 import t.me.octopusapps.taskflow.ui.dialogs.TaskCreatorDialog
 import t.me.octopusapps.taskflow.ui.viewmodels.TaskViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TasksScreen(
     navController: NavHostController,
@@ -46,6 +51,21 @@ fun TasksScreen(
     }
 
     Scaffold(
+        topBar = {
+            androidx.compose.material3.TopAppBar(
+                title = { Text("Task Flow") },
+                actions = {
+                    IconButton(onClick = {
+                        navController.navigate(NavDestinations.SETTINGS)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Settings"
+                        )
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(onClick = { showDialog = true }) {
                 Icon(Icons.Default.Add, contentDescription = "Add Task")
@@ -59,10 +79,6 @@ fun TasksScreen(
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "Task Flow",
-                    style = MaterialTheme.typography.titleLarge
-                )
                 if (tasks.isEmpty()) {
                     EmptyTaskMessage()
                 } else {

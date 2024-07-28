@@ -4,10 +4,11 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import t.me.octopusapps.taskflow.domain.models.Priority
+import java.util.UUID
 
 @Entity(tableName = "tasks")
 data class Task(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey val id: String = UUID.randomUUID().toString(),
     @ColumnInfo(name = "task_title") val taskTitle: String,
     @ColumnInfo(name = "timestamp") val timestamp: String,
     @ColumnInfo(name = "time_spent") var timeSpent: Long = 0L,

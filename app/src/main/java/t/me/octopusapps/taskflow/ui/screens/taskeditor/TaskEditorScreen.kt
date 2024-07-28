@@ -1,4 +1,4 @@
-package t.me.octopusapps.taskflow.ui.screens
+package t.me.octopusapps.taskflow.ui.screens.taskeditor
 
 import android.app.TimePickerDialog
 import android.icu.util.Calendar
@@ -39,12 +39,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import t.me.octopusapps.taskflow.data.local.models.Task
 import t.me.octopusapps.taskflow.domain.ext.formatTime
 import t.me.octopusapps.taskflow.domain.models.Priority
 import t.me.octopusapps.taskflow.ui.components.getColorByPriority
-import t.me.octopusapps.taskflow.ui.models.TaskItem
-import t.me.octopusapps.taskflow.ui.models.mapToEntity
-import t.me.octopusapps.taskflow.ui.viewmodels.TaskEditorViewModel
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -52,7 +50,7 @@ import java.time.LocalTime
 @Composable
 fun TaskEditorScreen(
     navController: NavHostController,
-    taskId: Int,
+    taskId: String,
     viewModel: TaskEditorViewModel = hiltViewModel()
 ) {
 
@@ -62,8 +60,8 @@ fun TaskEditorScreen(
 
     viewModel.loadTask(taskId)
 
-    when (val task = viewState.value.task) {
-        TaskItem.Skeleton -> {
+    when (val taskEditorItem = viewState.value.task) {
+        TaskEditorItem.Skeleton -> {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -78,11 +76,11 @@ fun TaskEditorScreen(
             }
         }
 
-        is TaskItem.Task -> {
-            var taskText by remember { mutableStateOf(TextFieldValue(task.taskTitle)) }
-            var selectedPriority by remember { mutableStateOf(task.priority) }
-            var selectedDate by remember { mutableStateOf(LocalDate.parse(task.date)) }
-            var selectedTime by remember { mutableStateOf(LocalTime.parse(task.time)) }
+        is TaskEditorItem.TaskEditor -> {
+            var taskText by remember { mutableStateOf(TextFieldValue(taskEditorItem.task.taskTitle)) }
+            var selectedPriority by remember { mutableStateOf(taskEditorItem.task.priority) }
+            var selectedDate by remember { mutableStateOf(LocalDate.parse(taskEditorItem.task.date)) }
+            var selectedTime by remember { mutableStateOf(LocalTime.parse(taskEditorItem.task.time)) }
             var showDatePicker by remember { mutableStateOf(false) }
             var showTimePicker by remember { mutableStateOf(false) }
 
@@ -215,16 +213,16 @@ fun TaskEditorScreen(
                         }
                         Button(onClick = {
                             viewModel.updateTask(
-                                TaskItem.Task(
-                                    id = task.id,
+                                Task(
+                                    id = taskEditorItem.task.id,
                                     taskTitle = taskText.text,
-                                    timeSpent = task.timeSpent,
+                                    timeSpent = taskEditorItem.task.timeSpent,
                                     priority = selectedPriority,
-                                    timestamp = task.timestamp,
+                                    timestamp = taskEditorItem.task.timestamp,
                                     date = selectedDate.toString(),
                                     time = selectedTime.toString(),
-                                    isCompleted = task.isCompleted
-                                ).mapToEntity()
+                                    isCompleted = taskEditorItem.task.isCompleted
+                                )
                             )
                             navController.popBackStack()
                         }) {

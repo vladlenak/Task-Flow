@@ -1,4 +1,4 @@
-package t.me.octopusapps.taskflow.ui.viewmodels
+package t.me.octopusapps.taskflow.ui.screens.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,8 +8,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import t.me.octopusapps.taskflow.data.local.datastore.DataStoreRepository
-import t.me.octopusapps.taskflow.ui.contract.SettingsState
-import t.me.octopusapps.taskflow.ui.models.SettingsItem
 import javax.inject.Inject
 
 @HiltViewModel

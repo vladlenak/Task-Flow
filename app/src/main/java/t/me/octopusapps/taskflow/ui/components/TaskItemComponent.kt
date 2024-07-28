@@ -32,7 +32,7 @@ import t.me.octopusapps.taskflow.utilities.TimeFormatHelper
 @Composable
 fun TaskItem(
     task: Task,
-    onClickItem: (Int) -> Unit,
+    onClickItem: (String) -> Unit,
     onCheckedChange: (Task, Boolean) -> Unit,
     onClickPlay: (Task) -> Unit
 ) {
@@ -104,9 +104,7 @@ fun TaskItem(
                     )
                 }
             }
-
-
         }
-
     }
+
 }

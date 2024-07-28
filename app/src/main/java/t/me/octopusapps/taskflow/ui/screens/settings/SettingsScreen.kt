@@ -1,4 +1,4 @@
-package t.me.octopusapps.taskflow.ui.screens
+package t.me.octopusapps.taskflow.ui.screens.settings
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -31,8 +31,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import t.me.octopusapps.taskflow.ui.models.SettingsItem
-import t.me.octopusapps.taskflow.ui.viewmodels.SettingsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

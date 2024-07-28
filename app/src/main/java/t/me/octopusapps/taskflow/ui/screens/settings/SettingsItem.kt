@@ -1,4 +1,4 @@
-package t.me.octopusapps.taskflow.ui.models
+package t.me.octopusapps.taskflow.ui.screens.settings
 
 sealed class SettingsItem {
     class Settings(

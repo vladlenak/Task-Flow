@@ -7,52 +7,46 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import t.me.octopusapps.taskflow.domain.constants.NavDestinations
-import t.me.octopusapps.taskflow.ui.screens.SettingsScreen
-import t.me.octopusapps.taskflow.ui.screens.StopwatchScreen
-import t.me.octopusapps.taskflow.ui.screens.TaskEditorScreen
-import t.me.octopusapps.taskflow.ui.screens.TasksScreen
-import t.me.octopusapps.taskflow.ui.viewmodels.TaskViewModel
+import t.me.octopusapps.taskflow.ui.screens.settings.SettingsScreen
+import t.me.octopusapps.taskflow.ui.screens.stopwatch.StopwatchScreen
+import t.me.octopusapps.taskflow.ui.screens.taskeditor.TaskEditorScreen
+import t.me.octopusapps.taskflow.ui.screens.taskflow.TaskFlowScreen
 
 @Composable
 fun AppNavigation(
-    navController: NavHostController,
-    taskViewModel: TaskViewModel
+    navController: NavHostController
 ) {
     NavHost(
         navController = navController,
         startDestination = NavDestinations.TASKS
     ) {
         composable(route = NavDestinations.TASKS) {
-            TasksScreen(
+            TaskFlowScreen(
                 navController = navController
             )
         }
         composable(
             route = "${NavDestinations.STOPWATCH}/{${NavDestinations.TASK_ID_ARG}}/{${NavDestinations.IS_CLICK_PLAY_ARG}}",
             arguments = listOf(
-                navArgument(NavDestinations.TASK_ID_ARG) { type = NavType.IntType },
+                navArgument(NavDestinations.TASK_ID_ARG) { type = NavType.StringType },
                 navArgument(NavDestinations.IS_CLICK_PLAY_ARG) { type = NavType.BoolType }
             )
         ) { backStackEntry ->
-            val taskId = backStackEntry.arguments?.getInt(NavDestinations.TASK_ID_ARG) ?: 0
+            val taskId = backStackEntry.arguments?.getString(NavDestinations.TASK_ID_ARG) ?: ""
             val isClickPlay = backStackEntry.arguments?.getBoolean(NavDestinations.IS_CLICK_PLAY_ARG) ?: false
-            taskViewModel.getTaskById(taskId)?.let { task ->
-                StopwatchScreen(
-                    navController = navController,
-                    task = task,
-                    isClickPlay = isClickPlay,
-                    onUpdateTask = { taskViewModel.updateTask(it) },
-                    onDeleteTask = { taskViewModel.deleteTask(it) }
-                )
-            }
+            StopwatchScreen(
+                navController = navController,
+                taskId = taskId,
+                isClickPlay = isClickPlay
+            )
         }
         composable(
             route = "${NavDestinations.EDIT_TASK}/{${NavDestinations.TASK_ID_ARG}}",
             arguments = listOf(
-                navArgument(NavDestinations.TASK_ID_ARG) { type = NavType.IntType }
+                navArgument(NavDestinations.TASK_ID_ARG) { type = NavType.StringType }
             )
         ) { backStackEntry ->
-            val taskId = backStackEntry.arguments?.getInt(NavDestinations.TASK_ID_ARG) ?: 0
+            val taskId = backStackEntry.arguments?.getString(NavDestinations.TASK_ID_ARG) ?: ""
             TaskEditorScreen(
                 navController = navController,
                 taskId = taskId

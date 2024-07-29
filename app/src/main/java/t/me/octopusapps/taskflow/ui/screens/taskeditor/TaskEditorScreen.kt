@@ -2,6 +2,7 @@ package t.me.octopusapps.taskflow.ui.screens.taskeditor
 
 import android.app.TimePickerDialog
 import android.icu.util.Calendar
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -86,6 +87,22 @@ fun TaskEditorScreen(
             var showDatePicker by remember { mutableStateOf(false) }
             var showTimePicker by remember { mutableStateOf(false) }
 
+            BackHandler {
+                viewModel.updateTask(
+                    Task(
+                        id = taskEditorItem.task.id,
+                        taskTitle = taskText.text,
+                        timeSpent = taskEditorItem.task.timeSpent,
+                        priority = selectedPriority,
+                        timestamp = taskEditorItem.task.timestamp,
+                        date = selectedDate,
+                        time = selectedTime,
+                        isCompleted = taskEditorItem.task.isCompleted
+                    )
+                )
+                navController.popBackStack()
+            }
+
             if (showDatePicker) {
                 LaunchedEffect(Unit) {
                     val calendar = Calendar.getInstance()
@@ -122,7 +139,21 @@ fun TaskEditorScreen(
                     androidx.compose.material3.TopAppBar(
                         title = { Text("Edit Task") },
                         navigationIcon = {
-                            IconButton(onClick = { navController.popBackStack() }) {
+                            IconButton(onClick = {
+                                viewModel.updateTask(
+                                    Task(
+                                        id = taskEditorItem.task.id,
+                                        taskTitle = taskText.text,
+                                        timeSpent = taskEditorItem.task.timeSpent,
+                                        priority = selectedPriority,
+                                        timestamp = taskEditorItem.task.timestamp,
+                                        date = selectedDate,
+                                        time = selectedTime,
+                                        isCompleted = taskEditorItem.task.isCompleted
+                                    )
+                                )
+                                navController.popBackStack()
+                            }) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                     contentDescription = "Back"
@@ -137,7 +168,6 @@ fun TaskEditorScreen(
                             .fillMaxSize()
                             .padding(paddingValues),
                         verticalArrangement = Arrangement.SpaceEvenly,
-//                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         TextField(
                             modifier = Modifier
@@ -250,29 +280,6 @@ fun TaskEditorScreen(
                                         tint = MaterialTheme.colorScheme.primary
                                     )
                                 }
-                            }
-                        }
-
-                        Box(
-                            modifier = Modifier.fillMaxWidth(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Button(onClick = {
-                                viewModel.updateTask(
-                                    Task(
-                                        id = taskEditorItem.task.id,
-                                        taskTitle = taskText.text,
-                                        timeSpent = taskEditorItem.task.timeSpent,
-                                        priority = selectedPriority,
-                                        timestamp = taskEditorItem.task.timestamp,
-                                        date = selectedDate,
-                                        time = selectedTime,
-                                        isCompleted = taskEditorItem.task.isCompleted
-                                    )
-                                )
-                                navController.popBackStack()
-                            }) {
-                                Text("Save Changes")
                             }
                         }
                     }

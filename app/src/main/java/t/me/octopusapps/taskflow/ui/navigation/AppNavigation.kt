@@ -26,18 +26,15 @@ fun AppNavigation(
             )
         }
         composable(
-            route = "${NavDestinations.STOPWATCH}/{${NavDestinations.TASK_ID_ARG}}/{${NavDestinations.IS_CLICK_PLAY_ARG}}",
+            route = "${NavDestinations.STOPWATCH}/{${NavDestinations.TASK_ID_ARG}}",
             arguments = listOf(
                 navArgument(NavDestinations.TASK_ID_ARG) { type = NavType.StringType },
-                navArgument(NavDestinations.IS_CLICK_PLAY_ARG) { type = NavType.BoolType }
             )
         ) { backStackEntry ->
             val taskId = backStackEntry.arguments?.getString(NavDestinations.TASK_ID_ARG) ?: ""
-            val isClickPlay = backStackEntry.arguments?.getBoolean(NavDestinations.IS_CLICK_PLAY_ARG) ?: false
             StopwatchScreen(
                 navController = navController,
-                taskId = taskId,
-                isClickPlay = isClickPlay
+                taskId = taskId
             )
         }
         composable(

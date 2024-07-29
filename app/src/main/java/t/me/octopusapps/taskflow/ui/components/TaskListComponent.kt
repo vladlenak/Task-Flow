@@ -24,7 +24,7 @@ fun TaskListComponent(
     isCompletedTasksVisible: Boolean,
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    taskViewModel: TaskFlowViewModel
+    viewModel: TaskFlowViewModel
 ) {
     val sortedTasksWithHeaders = mutableListOf<Any>()
     val filteredTasks = if (isCompletedTasksVisible) {
@@ -37,7 +37,9 @@ fun TaskListComponent(
         val tasksForPriority = filteredTasks.filter { it.priority == priority }
         if (tasksForPriority.isNotEmpty()) {
             sortedTasksWithHeaders.add(FullPriority.entries[index])
-            sortedTasksWithHeaders.addAll(tasksForPriority.sortedWith(compareBy({ it.date }, { it.time })))
+            sortedTasksWithHeaders.addAll(
+                tasksForPriority.sortedWith(compareBy({ it.date }, { it.time }))
+            )
         }
     }
 
@@ -62,14 +64,12 @@ fun TaskListComponent(
                         is FullPriority -> PriorityHeader(priority = item)
                         is Task -> TaskItem(
                             task = item,
+                            crashlyticsRepository = viewModel.getCrashlyticsRepository(),
                             onClickItem = {
-                                navController.navigate("${NavDestinations.STOPWATCH}/${item.id}/false")
+                                navController.navigate("${NavDestinations.STOPWATCH}/${item.id}")
                             },
                             onCheckedChange = { task, isChecked ->
-                                taskViewModel.onCheckedChange(task, isChecked)
-                            },
-                            onClickPlay = {
-                                navController.navigate("${NavDestinations.STOPWATCH}/${item.id}/true")
+                                viewModel.onCheckedChange(task, isChecked)
                             }
                         )
                     }

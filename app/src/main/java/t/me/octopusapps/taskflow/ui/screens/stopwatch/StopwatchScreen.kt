@@ -13,11 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -49,18 +48,17 @@ import t.me.octopusapps.taskflow.utilities.TimeFormatHelper
 fun StopwatchScreen(
     navController: NavHostController,
     taskId: String,
-    isClickPlay: Boolean,
     viewModel: StopwatchViewModel = hiltViewModel()
 ) {
 
     val viewState = viewModel.usState.collectAsState()
     viewModel.loadTask(taskId)
 
-    when(val stopwatchItem = viewState.value.stopwatchItem) {
+    when (val stopwatchItem = viewState.value.stopwatchItem) {
         StopwatchItem.Skeleton -> {}
         is StopwatchItem.Stopwatch -> {
             var timeElapsed by remember { mutableLongStateOf(stopwatchItem.task.timeSpent) }
-            var isRunning by remember { mutableStateOf(isClickPlay) }
+            var isRunning by remember { mutableStateOf(true) }
             var showDialog by remember { mutableStateOf(false) }
             var isChecked by remember { mutableStateOf(stopwatchItem.task.isCompleted) }
 
@@ -112,8 +110,13 @@ fun StopwatchScreen(
                     )
                     IconButton(
                         onClick = {
+                            isRunning = false
+                            stopwatchItem.task.timeSpent = timeElapsed
+                            viewModel.updateTask(stopwatchItem.task.copy(isCompleted = isChecked))
                             navController.navigate("${NavDestinations.EDIT_TASK}/${stopwatchItem.task.id}") {
-                                popUpTo("${NavDestinations.STOPWATCH}/{${NavDestinations.TASK_ID_ARG}}/{${NavDestinations.IS_CLICK_PLAY_ARG}}") { inclusive = true }
+                                popUpTo("${NavDestinations.STOPWATCH}/{${NavDestinations.TASK_ID_ARG}}") {
+                                    inclusive = true
+                                }
                                 launchSingleTop = true
                             }
                         },
@@ -122,6 +125,18 @@ fun StopwatchScreen(
                         Icon(
                             imageVector = Icons.Default.Edit,
                             contentDescription = "Task Action",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+                            showDialog = true
+                        },
+                        modifier = Modifier.size(48.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete",
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
@@ -143,46 +158,25 @@ fun StopwatchScreen(
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "Time: ${TimeFormatHelper.getTimeStr(timeElapsed)}",
+                            text = "Time: ${
+                                TimeFormatHelper.getTimeStr(
+                                    timeElapsed = timeElapsed,
+                                    crashlyticsRepository = viewModel.getCrashlyticsRepository()
+                                )
+                            }",
                             style = MaterialTheme.typography.bodyLarge,
                             fontSize = 20.sp
                         )
-                        DisplayDateTime(task = stopwatchItem.task)
+                        DisplayDateTime(
+                            task = stopwatchItem.task,
+                            crashlyticsRepository = viewModel.getCrashlyticsRepository()
+                        )
                     }
                 }
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Button(onClick = { showDialog = true }) {
-                            Text("Delete")
-                        }
-
-                        Spacer(modifier = Modifier.width(16.dp))
-
-                        Button(onClick = { isRunning = !isRunning }) {
-                            Text(if (isRunning) "Pause" else "Start")
-                        }
-
-                        Spacer(modifier = Modifier.width(16.dp))
-
-                        Button(onClick = {
-                            isRunning = false
-                            stopwatchItem.task.timeSpent = timeElapsed
-                            viewModel.updateTask(stopwatchItem.task.copy(isCompleted = isChecked))
-                            navController.popBackStack()
-                        }) {
-                            Text("Stop")
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
                     Text(
                         text = "Added on: ${stopwatchItem.task.timestamp}",
                         style = MaterialTheme.typography.bodySmall
@@ -200,6 +194,4 @@ fun StopwatchScreen(
             }
         }
     }
-
-
 }

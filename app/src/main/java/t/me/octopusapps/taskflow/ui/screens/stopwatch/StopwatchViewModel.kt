@@ -50,4 +50,6 @@ class StopwatchViewModel @Inject constructor(
         }
     }
 
+    fun getCrashlyticsRepository() = crashlyticsRepository
+
 }

@@ -11,11 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,14 +23,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import t.me.octopusapps.taskflow.data.local.models.Task
+import t.me.octopusapps.taskflow.data.remote.CrashlyticsRepository
 import t.me.octopusapps.taskflow.utilities.TimeFormatHelper
 
 @Composable
 fun TaskItem(
     task: Task,
+    crashlyticsRepository: CrashlyticsRepository,
     onClickItem: (String) -> Unit,
-    onCheckedChange: (Task, Boolean) -> Unit,
-    onClickPlay: (Task) -> Unit
+    onCheckedChange: (Task, Boolean) -> Unit
 ) {
     var isChecked by remember { mutableStateOf(task.isCompleted) }
 
@@ -72,18 +69,23 @@ fun TaskItem(
                 )
             }
             Column(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp),
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = task.taskTitle,
                     style = MaterialTheme.typography.titleLarge
                 )
-                DisplayDateTime(task = task)
+                DisplayDateTime(task = task, crashlyticsRepository = crashlyticsRepository)
             }
 
             Row {
-                val time = TimeFormatHelper.getTimeStr(task.timeSpent)
+                val time = TimeFormatHelper.getTimeStr(
+                    timeElapsed = task.timeSpent,
+                    crashlyticsRepository = crashlyticsRepository
+                )
                 if (time.toCharArray()[0] != '0') {
                     Box(
                         modifier = Modifier.size(48.dp),
@@ -94,17 +96,6 @@ fun TaskItem(
                             style = MaterialTheme.typography.bodyLarge,
                         )
                     }
-                }
-                IconButton(
-                    onClick = { onClickPlay(task) },
-                    modifier = Modifier
-                        .size(48.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.PlayArrow,
-                        contentDescription = "Task Action",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
                 }
             }
         }

@@ -78,7 +78,7 @@ fun TaskFlowScreen(
                             isCompletedTasksVisible = tasksItem.isCompletedTasksVisible,
                             navController = navController,
                             modifier = Modifier.weight(1f),
-                            taskViewModel = viewModel
+                            viewModel = viewModel
                         )
                         if (showDialog) {
                             TaskCreatorDialog(

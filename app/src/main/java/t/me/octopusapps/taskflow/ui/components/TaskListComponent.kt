@@ -36,7 +36,7 @@ fun TaskListComponent(
     }
     val filteredTasks2 = if (isPlannedTasksVisible) {
         filteredTasks.filter {
-            it.date != LocalDate.now().plusDays(1).toString()
+            it.date < LocalDate.now().plusDays(1).toString()
         }
     } else {
         filteredTasks

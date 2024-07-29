@@ -9,29 +9,45 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import t.me.octopusapps.taskflow.data.local.db.TaskDatabase
 import t.me.octopusapps.taskflow.data.local.models.Task
+import t.me.octopusapps.taskflow.data.remote.CrashlyticsRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class StopwatchViewModel @Inject constructor(
     private val taskDatabase: TaskDatabase,
+    private val crashlyticsRepository: CrashlyticsRepository
 ): ViewModel() {
 
     private val _uiState: MutableStateFlow<StopwatchState> =
         MutableStateFlow(StopwatchState(StopwatchItem.Skeleton))
     val usState = _uiState.asStateFlow()
 
-    fun loadTask(taskId: String) = viewModelScope.launch(Dispatchers.IO) {
-        _uiState.value = _uiState.value.copy(
-            stopwatchItem = StopwatchItem.Stopwatch(task = taskDatabase.taskDao().getTaskById(taskId))
-        )
+    fun loadTask(taskId: String) = viewModelScope.launch {
+        try {
+            taskDatabase.taskDao().getTaskById(taskId)?.let { task ->
+                _uiState.value = _uiState.value.copy(
+                    stopwatchItem = StopwatchItem.Stopwatch(task = task)
+                )
+            }
+        } catch (e: Exception) {
+            crashlyticsRepository.sendCrashlytics(e)
+        }
     }
 
     fun updateTask(task: Task) = viewModelScope.launch(Dispatchers.IO) {
-        taskDatabase.taskDao().update(task)
+        try {
+            taskDatabase.taskDao().update(task)
+        } catch (e: Exception) {
+            crashlyticsRepository.sendCrashlytics(e)
+        }
     }
 
     fun deleteTask(task: Task) = viewModelScope.launch(Dispatchers.IO) {
-        taskDatabase.taskDao().delete(task)
+        try {
+            taskDatabase.taskDao().delete(task)
+        } catch (e: Exception) {
+            crashlyticsRepository.sendCrashlytics(e)
+        }
     }
 
 }

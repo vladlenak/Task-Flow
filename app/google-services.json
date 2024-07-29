@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "26506574540",
+    "project_id": "task-flow-7a359",
+    "storage_bucket": "task-flow-7a359.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:26506574540:android:e7b8e91a3672d89a82a069",
+        "android_client_info": {
+          "package_name": "t.me.octopusapps.taskflow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALkNClP_eeGvVheA64cOnZekjL7HjHITI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

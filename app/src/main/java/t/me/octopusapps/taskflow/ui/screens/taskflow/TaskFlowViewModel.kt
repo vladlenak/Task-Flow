@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import t.me.octopusapps.taskflow.data.local.datastore.DataStoreRepository
 import t.me.octopusapps.taskflow.data.local.db.TaskDatabase
 import t.me.octopusapps.taskflow.data.local.models.Task
+import t.me.octopusapps.taskflow.data.remote.CrashlyticsRepository
 import t.me.octopusapps.taskflow.domain.constants.CommonConstants
 import t.me.octopusapps.taskflow.domain.ext.formatTime
 import t.me.octopusapps.taskflow.domain.models.Priority
@@ -23,7 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TaskFlowViewModel @Inject constructor(
     private val taskDatabase: TaskDatabase,
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val crashlyticsRepository: CrashlyticsRepository
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<TaskFlowState> =
@@ -32,13 +34,17 @@ class TaskFlowViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(
-                tasksItem = TaskFlowItem.Tasks(
-                    tasks = taskDatabase.taskDao().getAllTasks(),
-                    isCompletedTasksVisible = dataStoreRepository.getIsCompletedTasksVisible()
-                        ?: true
+            try {
+                _uiState.value = _uiState.value.copy(
+                    tasksItem = TaskFlowItem.Tasks(
+                        tasks = taskDatabase.taskDao().getAllTasks(),
+                        isCompletedTasksVisible = dataStoreRepository.getIsCompletedTasksVisible()
+                            ?: true
+                    )
                 )
-            )
+            } catch (e: Exception) {
+                crashlyticsRepository.sendCrashlytics(e)
+            }
         }
     }
 
@@ -47,36 +53,50 @@ class TaskFlowViewModel @Inject constructor(
         priority: Priority,
         selectedDate: LocalDate,
         selectedTime: LocalTime
-    ) {
-        val timestamp =
-            SimpleDateFormat(CommonConstants.TIMESTAMP_PATTERN, Locale.getDefault()).format(Date())
-        val newTask = Task(
-            taskTitle = taskText,
-            timestamp = timestamp,
-            timeSpent = 0L,
-            priority = priority,
-            date = selectedDate.toString(),
-            time = selectedTime.toString().formatTime(),
-            isCompleted = false
-        )
-        viewModelScope.launch {
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            val timestamp =
+                SimpleDateFormat(
+                    CommonConstants.TIMESTAMP_PATTERN,
+                    Locale.getDefault()
+                ).format(Date())
+            val newTask = Task(
+                taskTitle = taskText,
+                timestamp = timestamp,
+                timeSpent = 0L,
+                priority = priority,
+                date = selectedDate.toString(),
+                time = selectedTime.toString().formatTime(),
+                isCompleted = false
+            )
             taskDatabase.taskDao().insert(newTask)
             refreshTasks()
+        } catch (e: Exception) {
+            crashlyticsRepository.sendCrashlytics(e)
         }
     }
 
     fun refreshTasks() = viewModelScope.launch {
-        _uiState.value = _uiState.value.copy(
-            tasksItem = TaskFlowItem.Tasks(
-                tasks = taskDatabase.taskDao().getAllTasks(),
-                isCompletedTasksVisible = dataStoreRepository.getIsCompletedTasksVisible() ?: true
+        try {
+            _uiState.value = _uiState.value.copy(
+                tasksItem = TaskFlowItem.Tasks(
+                    tasks = taskDatabase.taskDao().getAllTasks(),
+                    isCompletedTasksVisible = dataStoreRepository.getIsCompletedTasksVisible()
+                        ?: true
+                )
             )
-        )
+        } catch (e: Exception) {
+            crashlyticsRepository.sendCrashlytics(e)
+        }
     }
 
     fun onCheckedChange(task: Task, isChecked: Boolean) = viewModelScope.launch(Dispatchers.IO) {
-        taskDatabase.taskDao().update(task.copy(isCompleted = isChecked))
-        refreshTasks()
+        try {
+            taskDatabase.taskDao().update(task.copy(isCompleted = isChecked))
+            refreshTasks()
+        } catch (e: Exception) {
+            crashlyticsRepository.sendCrashlytics(e)
+        }
     }
 
 }

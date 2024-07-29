@@ -11,7 +11,7 @@ import t.me.octopusapps.taskflow.data.local.db.TaskDatabase
 
 @Module
 @InstallIn(ViewModelComponent::class)
-object DataModule {
+object RoomModule {
 
     @Provides
     fun provideDatabase(@ApplicationContext context: Context): TaskDatabase {

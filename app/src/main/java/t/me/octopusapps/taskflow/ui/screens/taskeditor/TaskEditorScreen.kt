@@ -60,7 +60,7 @@ fun TaskEditorScreen(
 
     viewModel.loadTask(taskId)
 
-    when (val taskEditorItem = viewState.value.task) {
+    when (val taskEditorItem = viewState.value.taskEditorItem) {
         TaskEditorItem.Skeleton -> {
             Box(
                 modifier = Modifier

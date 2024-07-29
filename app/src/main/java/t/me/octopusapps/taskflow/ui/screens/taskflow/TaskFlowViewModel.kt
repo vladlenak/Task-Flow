@@ -15,8 +15,6 @@ import t.me.octopusapps.taskflow.domain.constants.CommonConstants
 import t.me.octopusapps.taskflow.domain.ext.formatTime
 import t.me.octopusapps.taskflow.domain.models.Priority
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalTime
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
@@ -51,8 +49,8 @@ class TaskFlowViewModel @Inject constructor(
     fun addTask(
         taskText: String,
         priority: Priority,
-        selectedDate: LocalDate,
-        selectedTime: LocalTime
+        selectedDate: String,
+        selectedTime: String
     ) = viewModelScope.launch(Dispatchers.IO) {
         try {
             val timestamp =
@@ -65,8 +63,8 @@ class TaskFlowViewModel @Inject constructor(
                 timestamp = timestamp,
                 timeSpent = 0L,
                 priority = priority,
-                date = selectedDate.toString(),
-                time = selectedTime.toString().formatTime(),
+                date = selectedDate,
+                time = selectedTime.formatTime(crashlyticsRepository = crashlyticsRepository),
                 isCompleted = false
             )
             taskDatabase.taskDao().insert(newTask)
@@ -98,5 +96,7 @@ class TaskFlowViewModel @Inject constructor(
             crashlyticsRepository.sendCrashlytics(e)
         }
     }
+
+    fun getCrashlyticsRepository() = crashlyticsRepository
 
 }

@@ -43,4 +43,6 @@ class TaskEditorViewModel @Inject constructor(
         }
     }
 
+    fun getCrashlyticsRepository() = crashlyticsRepository
+
 }

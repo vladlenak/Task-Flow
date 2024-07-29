@@ -147,7 +147,6 @@ fun StopwatchScreen(
                             style = MaterialTheme.typography.bodyLarge,
                             fontSize = 20.sp
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
                         DisplayDateTime(task = stopwatchItem.task)
                     }
                 }

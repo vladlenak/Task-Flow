@@ -82,6 +82,7 @@ fun TaskFlowScreen(
                         )
                         if (showDialog) {
                             TaskCreatorDialog(
+                                crashlyticsRepository = viewModel.getCrashlyticsRepository(),
                                 onDismiss = { showDialog = false },
                                 onAddTask = { taskText, priority, selectedDate, selectedTime ->
                                     viewModel.addTask(

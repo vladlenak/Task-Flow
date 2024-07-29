@@ -72,25 +72,28 @@ fun TaskItem(
                 )
             }
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = task.taskTitle,
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    style = MaterialTheme.typography.titleLarge
                 )
                 DisplayDateTime(task = task)
             }
 
             Row {
-                Box(
-                    modifier = Modifier.size(48.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = TimeFormatHelper.getTimeStr(task.timeSpent),
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
+                val time = TimeFormatHelper.getTimeStr(task.timeSpent)
+                if (time.toCharArray()[0] != '0') {
+                    Box(
+                        modifier = Modifier.size(48.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = time,
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                    }
                 }
                 IconButton(
                     onClick = { onClickPlay(task) },

@@ -37,7 +37,8 @@ class TaskFlowViewModel @Inject constructor(
                     tasksItem = TaskFlowItem.Tasks(
                         tasks = taskDatabase.taskDao().getAllTasks(),
                         isCompletedTasksVisible = dataStoreRepository.getIsCompletedTasksVisible()
-                            ?: true
+                            ?: true,
+                        mainGoal = dataStoreRepository.getGoal() ?: ""
                     )
                 )
             } catch (e: Exception) {
@@ -80,7 +81,8 @@ class TaskFlowViewModel @Inject constructor(
                 tasksItem = TaskFlowItem.Tasks(
                     tasks = taskDatabase.taskDao().getAllTasks(),
                     isCompletedTasksVisible = dataStoreRepository.getIsCompletedTasksVisible()
-                        ?: true
+                        ?: true,
+                    mainGoal = dataStoreRepository.getGoal() ?: ""
                 )
             )
         } catch (e: Exception) {

@@ -21,11 +21,12 @@ class SettingsViewModel @Inject constructor(
         MutableStateFlow(SettingsState(SettingsItem.Skeleton))
     val uiState = _uiState.asStateFlow()
 
-    fun getIsCompletedTasksVisible() = viewModelScope.launch {
+    fun restoreUiState() = viewModelScope.launch {
         try {
             _uiState.value = _uiState.value.copy(
-                settings = SettingsItem.Settings(
-                    isCompletedTasksVisible = dataStoreRepository.getIsCompletedTasksVisible()
+                settingsItem = SettingsItem.Settings(
+                    isCompletedTasksVisible = dataStoreRepository.getIsCompletedTasksVisible(),
+                    goal = dataStoreRepository.getGoal() ?: ""
                 )
             )
         } catch (e: Exception) {
@@ -33,12 +34,11 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun saveIsCompletedTasksVisible(isCompletedTasksVisible: Boolean) =
+    fun saveUiState(isCompletedTasksVisible: Boolean, mainGoal: String) =
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                dataStoreRepository.saveIsCompletedTasksVisible(
-                    isCompletedTasksVisible = isCompletedTasksVisible
-                )
+                dataStoreRepository.saveIsCompletedTasksVisible(isCompletedTasksVisible = isCompletedTasksVisible)
+                dataStoreRepository.saveGoal(mainGoal)
             } catch (e: Exception) {
                 crashlyticsRepository.sendCrashlytics(e)
             }

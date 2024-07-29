@@ -11,6 +11,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import t.me.octopusapps.taskflow.data.local.datastore.BooleanDataStoreSource
 import t.me.octopusapps.taskflow.data.local.datastore.DataStoreRepository
+import t.me.octopusapps.taskflow.data.local.datastore.StringDataStoreSource
 import t.me.octopusapps.taskflow.domain.constants.DataStoreConstants
 import javax.inject.Singleton
 
@@ -34,7 +35,15 @@ object DataStoreModule {
 
     @Singleton
     @Provides
-    fun provideDataStoreRepository(booleanDataStoreSource: BooleanDataStoreSource): DataStoreRepository =
-        DataStoreRepository(booleanDataStoreSource)
+    fun provideStringDataStoreSource(dataStore: DataStore<Preferences>): StringDataStoreSource =
+        StringDataStoreSource(dataStore)
+
+    @Singleton
+    @Provides
+    fun provideDataStoreRepository(
+        booleanDataStoreSource: BooleanDataStoreSource,
+        stringDataStoreSource: StringDataStoreSource
+    ): DataStoreRepository =
+        DataStoreRepository(booleanDataStoreSource, stringDataStoreSource)
 
 }

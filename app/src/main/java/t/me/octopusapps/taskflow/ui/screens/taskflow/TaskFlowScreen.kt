@@ -47,7 +47,10 @@ fun TaskFlowScreen(
             Scaffold(
                 topBar = {
                     androidx.compose.material3.TopAppBar(
-                        title = { Text("Task Flow") },
+                        title = {
+                            if (tasksItem.mainGoal.isNotEmpty()) Text(text = tasksItem.mainGoal)
+                            else Text(text = "Task Flow")
+                        },
                         actions = {
                             IconButton(onClick = {
                                 navController.navigate(NavDestinations.SETTINGS)

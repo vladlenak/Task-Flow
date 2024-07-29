@@ -63,13 +63,16 @@ fun SettingsScreen(
         }
 
         is SettingsItem.Settings -> {
+            var taskText by remember { mutableStateOf(TextFieldValue(settingsItem.goal)) }
+            var hidePlannedTasks by remember {
+                mutableStateOf(settingsItem.isPlannedTasksVisible ?: true)
+            }
             var hideCompletedTasks by remember {
                 mutableStateOf(settingsItem.isCompletedTasksVisible ?: true)
             }
-            var taskText by remember { mutableStateOf(TextFieldValue(settingsItem.goal)) }
 
             BackHandler {
-                viewModel.saveUiState(hideCompletedTasks, taskText.text)
+                viewModel.saveUiState(taskText.text, hidePlannedTasks, hideCompletedTasks)
                 navController.popBackStack()
             }
 
@@ -79,7 +82,11 @@ fun SettingsScreen(
                         title = { Text("Settings") },
                         navigationIcon = {
                             IconButton(onClick = {
-                                viewModel.saveUiState(hideCompletedTasks, taskText.text)
+                                viewModel.saveUiState(
+                                    taskText.text,
+                                    hidePlannedTasks,
+                                    hideCompletedTasks
+                                )
                                 navController.popBackStack()
                             }) {
                                 Icon(
@@ -111,6 +118,19 @@ fun SettingsScreen(
                                 capitalization = KeyboardCapitalization.Sentences
                             )
                         )
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(text = "Hide planned tasks", modifier = Modifier.weight(1f))
+                            Checkbox(
+                                checked = hidePlannedTasks,
+                                onCheckedChange = { hidePlannedTasks = it }
+                            )
+                        }
 
                         Row(
                             modifier = Modifier

@@ -24,14 +24,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import t.me.octopusapps.taskflow.data.local.models.Task
 import t.me.octopusapps.taskflow.data.remote.CrashlyticsRepository
+import t.me.octopusapps.taskflow.domain.models.Priority
+import t.me.octopusapps.taskflow.ui.screens.taskflow.TaskFlowViewModel
 import t.me.octopusapps.taskflow.utilities.TimeFormatHelper
 
 @Composable
 fun TaskItem(
     task: Task,
+    viewModel: TaskFlowViewModel,
     crashlyticsRepository: CrashlyticsRepository,
-    onClickItem: (String) -> Unit,
-    onCheckedChange: (Task, Boolean) -> Unit
+    onClickItem: (String) -> Unit
 ) {
     var isChecked by remember { mutableStateOf(task.isCompleted) }
 
@@ -63,7 +65,8 @@ fun TaskItem(
                     checked = isChecked,
                     onCheckedChange = { checked ->
                         isChecked = checked
-                        onCheckedChange(task, checked)
+                        viewModel.onCheckedChange(task = task, isChecked = checked)
+                        if (task.priority == Priority.H) isChecked = false
                     },
                     modifier = Modifier.padding(end = 8.dp)
                 )

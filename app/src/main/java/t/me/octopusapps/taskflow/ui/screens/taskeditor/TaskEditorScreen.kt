@@ -191,18 +191,37 @@ fun TaskEditorScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             priorities.forEach { priority ->
-                                Button(
-                                    onClick = { selectedPriority = priority },
-                                    colors = if (selectedPriority == priority) {
-                                        ButtonDefaults.buttonColors(
-                                            containerColor = getColorByPriority(priority)
-                                        )
-                                    } else {
-                                        ButtonDefaults.buttonColors()
+                                if (priority != Priority.H) {
+                                    Button(
+                                        onClick = { selectedPriority = priority },
+                                        colors = if (selectedPriority == priority) {
+                                            ButtonDefaults.buttonColors(
+                                                containerColor = getColorByPriority(priority)
+                                            )
+                                        } else {
+                                            ButtonDefaults.buttonColors()
+                                        }
+                                    ) {
+                                        Text(priority.displayName)
                                     }
-                                ) {
-                                    Text(priority.displayName)
                                 }
+                            }
+                            Button(
+                                onClick = {
+                                    selectedPriority = Priority.H
+                                    selectedDate = LocalDate.now().toString()
+                                },
+                                colors = if (selectedPriority == Priority.H) {
+                                    ButtonDefaults.buttonColors(
+                                        containerColor = getColorByPriority(
+                                            priority = Priority.H
+                                        )
+                                    )
+                                } else {
+                                    ButtonDefaults.buttonColors()
+                                }
+                            ) {
+                                Text(Priority.H.displayName)
                             }
                         }
 
@@ -231,18 +250,20 @@ fun TaskEditorScreen(
                                 ) {
                                     Text(selectedDate)
                                 }
-                                IconButton(
-                                    onClick = {
-                                        selectedDate = ""
-                                    },
-                                    modifier = Modifier
-                                        .size(48.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Delete,
-                                        contentDescription = "Delete Date",
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
+                                if (selectedPriority != Priority.H) {
+                                    IconButton(
+                                        onClick = {
+                                            selectedDate = ""
+                                        },
+                                        modifier = Modifier
+                                            .size(48.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Delete,
+                                            contentDescription = "Delete Date",
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
                                 }
                             }
                         }

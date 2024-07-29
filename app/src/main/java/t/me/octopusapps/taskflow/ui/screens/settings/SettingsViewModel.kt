@@ -26,7 +26,8 @@ class SettingsViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(
                 settingsItem = SettingsItem.Settings(
                     isCompletedTasksVisible = dataStoreRepository.getIsCompletedTasksVisible(),
-                    goal = dataStoreRepository.getGoal() ?: ""
+                    goal = dataStoreRepository.getGoal() ?: "",
+                    isPlannedTasksVisible = dataStoreRepository.getIsPlannedTasksVisible()
                 )
             )
         } catch (e: Exception) {
@@ -34,11 +35,12 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun saveUiState(isCompletedTasksVisible: Boolean, mainGoal: String) =
+    fun saveUiState(mainGoal: String, isPlannedTasksVisible: Boolean, isCompletedTasksVisible: Boolean) =
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                dataStoreRepository.saveGoal(mainGoal = mainGoal)
+                dataStoreRepository.saveIsPlannedTasksVisible(isPlannedTasksVisible = isPlannedTasksVisible)
                 dataStoreRepository.saveIsCompletedTasksVisible(isCompletedTasksVisible = isCompletedTasksVisible)
-                dataStoreRepository.saveGoal(mainGoal)
             } catch (e: Exception) {
                 crashlyticsRepository.sendCrashlytics(e)
             }

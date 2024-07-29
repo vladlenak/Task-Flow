@@ -39,6 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import t.me.octopusapps.taskflow.domain.constants.NavDestinations
+import t.me.octopusapps.taskflow.domain.models.Priority
 import t.me.octopusapps.taskflow.ui.components.DisplayDateTime
 import t.me.octopusapps.taskflow.ui.components.getColorByPriority
 import t.me.octopusapps.taskflow.ui.dialogs.DeleteTaskDialog
@@ -98,6 +99,11 @@ fun StopwatchScreen(
                         checked = isChecked,
                         onCheckedChange = { checked ->
                             isChecked = checked
+
+                            if (stopwatchItem.task.priority == Priority.H) {
+                                viewModel.onCheckedChange(stopwatchItem.task)
+                                isChecked = false
+                            }
                         },
                         modifier = Modifier
                             .padding(end = 8.dp)

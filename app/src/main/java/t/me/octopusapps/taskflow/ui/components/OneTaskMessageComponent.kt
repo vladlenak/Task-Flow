@@ -19,7 +19,7 @@ fun OneTaskMessageComponent() {
             .background(Color.Transparent)
     ) {
         Text(
-            text = "Click on task to start",
+            text = "Click on task/habit to start",
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             modifier = Modifier.align(Alignment.Center)

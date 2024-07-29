@@ -15,6 +15,7 @@ import t.me.octopusapps.taskflow.domain.constants.CommonConstants
 import t.me.octopusapps.taskflow.domain.ext.formatTime
 import t.me.octopusapps.taskflow.domain.models.Priority
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
@@ -36,6 +37,8 @@ class TaskFlowViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(
                     tasksItem = TaskFlowItem.Tasks(
                         tasks = taskDatabase.taskDao().getAllTasks(),
+                        isPlannedTasksVisible = dataStoreRepository.getIsPlannedTasksVisible()
+                            ?: true,
                         isCompletedTasksVisible = dataStoreRepository.getIsCompletedTasksVisible()
                             ?: true,
                         mainGoal = dataStoreRepository.getGoal() ?: ""
@@ -80,6 +83,7 @@ class TaskFlowViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(
                 tasksItem = TaskFlowItem.Tasks(
                     tasks = taskDatabase.taskDao().getAllTasks(),
+                    isPlannedTasksVisible = dataStoreRepository.getIsPlannedTasksVisible() ?: true,
                     isCompletedTasksVisible = dataStoreRepository.getIsCompletedTasksVisible()
                         ?: true,
                     mainGoal = dataStoreRepository.getGoal() ?: ""
@@ -92,7 +96,13 @@ class TaskFlowViewModel @Inject constructor(
 
     fun onCheckedChange(task: Task, isChecked: Boolean) = viewModelScope.launch(Dispatchers.IO) {
         try {
-            taskDatabase.taskDao().update(task.copy(isCompleted = isChecked))
+            if (task.priority == Priority.H) {
+                taskDatabase.taskDao()
+                    .update(task.copy(date = LocalDate.now().plusDays(1).toString()))
+            } else {
+                taskDatabase.taskDao().update(task.copy(isCompleted = isChecked))
+            }
+
             refreshTasks()
         } catch (e: Exception) {
             crashlyticsRepository.sendCrashlytics(e)

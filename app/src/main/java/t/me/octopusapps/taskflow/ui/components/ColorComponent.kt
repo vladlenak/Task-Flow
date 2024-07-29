@@ -11,5 +11,6 @@ fun getColorByPriority(priority: Priority): Color {
         Priority.B -> Color.Green
         Priority.C -> Color.Yellow
         Priority.D -> Color.Gray
+        Priority.H -> Color.Cyan
     }
 }

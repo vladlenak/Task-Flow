@@ -78,6 +78,7 @@ fun TaskFlowScreen(
                     ) {
                         TaskListComponent(
                             tasks = tasksItem.tasks,
+                            isPlannedTasksVisible = tasksItem.isPlannedTasksVisible,
                             isCompletedTasksVisible = tasksItem.isCompletedTasksVisible,
                             navController = navController,
                             modifier = Modifier.weight(1f),
@@ -89,10 +90,10 @@ fun TaskFlowScreen(
                                 onDismiss = { showDialog = false },
                                 onAddTask = { taskText, priority, selectedDate, selectedTime ->
                                     viewModel.addTask(
-                                        taskText,
-                                        priority,
-                                        selectedDate,
-                                        selectedTime
+                                        taskText = taskText,
+                                        priority = priority,
+                                        selectedDate = selectedDate,
+                                        selectedTime = selectedTime
                                     )
                                     showDialog = false
                                 }

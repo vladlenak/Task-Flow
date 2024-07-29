@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import t.me.octopusapps.taskflow.data.local.db.TaskDatabase
 import t.me.octopusapps.taskflow.data.local.models.Task
 import t.me.octopusapps.taskflow.data.remote.CrashlyticsRepository
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,6 +46,15 @@ class StopwatchViewModel @Inject constructor(
     fun deleteTask(task: Task) = viewModelScope.launch(Dispatchers.IO) {
         try {
             taskDatabase.taskDao().delete(task)
+        } catch (e: Exception) {
+            crashlyticsRepository.sendCrashlytics(e)
+        }
+    }
+
+    fun onCheckedChange(task: Task) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            taskDatabase.taskDao().update(task.copy(date = LocalDate.now().plusDays(1).toString()))
+            loadTask(task.id)
         } catch (e: Exception) {
             crashlyticsRepository.sendCrashlytics(e)
         }
